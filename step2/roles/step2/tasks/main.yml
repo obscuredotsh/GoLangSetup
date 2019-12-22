@@ -1,0 +1,44 @@
+---
+
+- name: check if GO LANG is already installed
+  stat:
+    path: /usr/local/go
+  register: golang
+
+- name: Download Go Lang source code & Binary if not installed
+  get_url:
+    url: https://storage.googleapis.com/golang/go1.12.9.linux-amd64.tar.gz
+    dest: /tmp/go1.12.9.linux-amd64.tar.gz
+    mode: '0644'
+  when: not golang.stat.exists
+
+- name: Extracting archive of go lang
+  raw: tar xvf /tmp/go1.12.9.linux-amd64.tar.gz -C /usr/local/
+  when: not golang.stat.exists
+
+- name: Running GO help test
+  command: go help
+
+- name: check if project home directory already exists
+  stat:
+    path: $HOME/go
+  register: gohome
+
+- name: Create project home dir if not existing
+  file:
+    path: $HOME/go
+    state: directory
+  when: not gohome.stat.exists
+
+- name: Copying sample hello.go file
+  copy:
+    src: hello.go
+    dest: $HOME/go
+
+- name: Running Go project 
+  shell: go run hello.go 2& > /dev/null
+  args:
+    chdir: $HOME/go/
+  poll: 0                           #Move to next task immediately
+  async: 30                         # but Try this for 30 secs
+

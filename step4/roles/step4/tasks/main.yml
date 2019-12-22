@@ -1,0 +1,22 @@
+---
+
+- name: Update repositories cache
+  raw: apt-get update ; apt-get install aptitude nginx -y
+
+- name: copying proper template file nginx from templates
+  template:
+    src: assignment.conf.j2
+    dest: /etc/nginx/conf.d/assignment.conf
+
+- name: Remove default symlink if existing
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+
+- name: restart nginx
+  service: 
+    name: nginx 
+    state: restarted 
+#    enabled: yes
+
+

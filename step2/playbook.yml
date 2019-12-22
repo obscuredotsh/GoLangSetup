@@ -1,0 +1,10 @@
+---
+- hosts: WebApp
+  become: true
+  roles:
+    - step2
+  environment:
+    GOPATH: /home/root/go
+    PATH: $PATH:/usr/local/go/bin:/home/root/go/bin
+#    PATH: "/usr/bin:/usr/sbin"
+
