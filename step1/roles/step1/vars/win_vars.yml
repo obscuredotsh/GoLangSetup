@@ -1,7 +1,0 @@
----
-# vars file for windows
-[win:vars]
-ansible_user=Administrator
-ansible_password=p@u*QmibcN
-ansible_connection=winrm
-ansible_winrm_server_cert_validation=ignore
